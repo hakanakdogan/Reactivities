@@ -1,32 +1,24 @@
+import { observer } from "mobx-react-lite";
 import React, { SyntheticEvent, useState } from "react";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
-import { Activity } from "../../../app/models/activity";
+import { useStore } from "../../../app/stores/store";
 
-interface Props {
-  activities: Activity[];
-  selectActivityFunc: (id: string) => void;
-  handleDeleteActivity: (id: string) => void;
-  submitting: boolean;
-}
-
-export const ActivityList = ({
-  activities,
-  selectActivityFunc,
-  handleDeleteActivity,
-  submitting,
-}: Props) => {
+export default observer(function ActivityList() {
+  const { activityStore } = useStore();
+  const { deleteActivity, activitiesByDate, loading } = activityStore;
   const [target, setTarget] = useState("");
   const handleActivityDelete = (
     e: SyntheticEvent<HTMLButtonElement>,
     id: string
   ) => {
     setTarget(e.currentTarget.name);
-    handleDeleteActivity(id);
+    deleteActivity(id);
   };
+
   return (
     <Segment>
       <Item.Group divided>
-        {activities.map((activity) => {
+        {activitiesByDate.map((activity) => {
           return (
             <Item key={activity.id}>
               <Item.Content>
@@ -41,7 +33,7 @@ export const ActivityList = ({
                 </Item.Description>
                 <Item.Extra>
                   <Button
-                    onClick={() => selectActivityFunc(activity.id)}
+                    onClick={() => activityStore.selectActivity(activity.id)}
                     floated="right"
                     content="View"
                     color="blue"
@@ -52,7 +44,7 @@ export const ActivityList = ({
                     floated="right"
                     content="Delete"
                     color="red"
-                    loading={submitting && target === activity.id}
+                    loading={loading && target === activity.id}
                   />
                   <Label basic content={activity.category} />
                 </Item.Extra>
@@ -63,4 +55,4 @@ export const ActivityList = ({
       </Item.Group>
     </Segment>
   );
-};
+});
