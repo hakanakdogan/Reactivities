@@ -35,7 +35,7 @@ export const ActivityDetails = observer(() => {
         <ActivityDetailedChat />
       </Grid.Column>
       <GridColumn width={6}>
-        <ActivityDetailedSidebar />
+        <ActivityDetailedSidebar activity={activity} />
       </GridColumn>
     </Grid>
   );
