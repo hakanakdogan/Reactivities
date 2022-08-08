@@ -44,10 +44,12 @@ namespace API
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 opt.Filters.Add(new AuthorizeFilter(policy)); //bütün endpointlere authorization ekledi
             })
+               
                 .AddFluentValidation(config =>
             {
                 config.RegisterValidatorsFromAssemblyContaining<Create>();
             });
+                
             services.AddApplicationServices(_config);
             services.AddIdentityServices(_config);
         }
